@@ -2,6 +2,7 @@ import express from "express";
 import { getAllUser, createUser, getUser, deleteUser } from "./database.js";
 const app = express();
 import productRouter from "./product/productController.js";
+import orderRouter from "./orders/orderController.js";
 app.use(express.json());
 
 // app.use(productRouter);
@@ -62,7 +63,7 @@ app.delete("/user/:id", async (req, res, next) => {
   }
 });
 
-console.log("here");
 app.use(/^\/products?/, productRouter);
+app.use(/^\/orders?/, orderRouter);
 
 export default app;

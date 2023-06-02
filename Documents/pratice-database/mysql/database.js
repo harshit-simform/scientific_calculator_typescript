@@ -34,8 +34,7 @@ export async function getAllProduct(req, res) {
 }
 
 export async function createProduct(req, res) {
-  let { title, amount, description } = req.body;
-  password = await bcrypt.hash(password, 10);
+  let { title, amount, description = null } = req.body;
   const result = await pool.query(
     `INSERT INTO products(title,amount,description) VALUES(?,?,?)`,
     [title, amount, description]
@@ -52,3 +51,44 @@ export async function deleteProduct(id) {
   const result = await pool.query("DELETE FROM products WHERE id = ?", id);
   return result;
 }
+
+/// orders
+export async function getAllOrder(req, res) {
+  const result = await pool.query("SELECT * FROM orders");
+  return result;
+}
+
+export async function createOrder(req, res) {
+  let {
+    userId,
+    orderStatus,
+    orderDate = new Date().toISOString().slice(0, 10),
+    deliveryDate = new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .slice(0, 10),
+    productId,
+  } = req.body;
+  console.log(orderDate);
+  const createOrderData = await pool.query(
+    `INSERT INTO orders(user_id,order_status,order_date,delivery_date) VALUES(?,?,?,?)`,
+    [userId, orderStatus, orderDate, deliveryDate]
+  );
+  await pool.query(
+    `INSERT INTO order_details(order_id,product_id) VALUES(?,?)`,
+    [createOrderData[0].insertId, productId]
+  );
+  return createOrderData;
+}
+
+export async function getOrder(id) {
+  const result = await pool.query("SELECT * FROM orders WHERE id = ?", id);
+  return result;
+}
+
+export async function deleteOrder(id) {
+  const result = await pool.query("DELETE FROM orders WHERE id = ?", id);
+  return result;
+}
+
+("select u.name , o.id as order_id , p.title as product_name , order_status , delivery_date  from order_details od join products p on od.product_id = p.id join orders o on od.order_id = o.id join user u on o.user_id = u.id");
+("select u.name , o.id as order_id , p.title as product_name , order_status , delivery_date  from order_details od join products p on od.product_id = p.id join orders o on od.order_id = o.id join user u on o.user_id = u.id");
