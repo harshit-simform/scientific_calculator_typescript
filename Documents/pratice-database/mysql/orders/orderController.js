@@ -1,4 +1,5 @@
-import express from "express";
+const express = require("express");
+
 import {
   getAllOrder,
   getOrder,
@@ -67,5 +68,5 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-// module.exports = router;
-export default router;
+module.exports = router;
+// export default router;

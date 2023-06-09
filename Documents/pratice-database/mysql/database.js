@@ -1,4 +1,4 @@
-import pool from "./server.js";
+// import pool from "./server.js";
 import bcrypt from "bcryptjs";
 
 export async function getAllUser(req, res) {
