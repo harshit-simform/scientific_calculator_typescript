@@ -1,28 +1,39 @@
-// import express from "express";
-// import {
-//   getAllUser,
-//   createUser,
-//   getUser,
-//   deleteUser,
-//   getAllUndeliverOrder,
-//   fiveRecentOrder,
-//   topActiveUser,
-//   inActiveUser,
-//   mostPurchasedProduct,
-//   mostExpensiveOrder,
-//   leastExpensiveOrder,
-// } from "./database.js";
 const express = require("express");
-const sequelize = require("./server");
-const { Sequelize } = require("sequelize");
-const { QueryTypes } = require("sequelize");
-
 const app = express();
-// import productRouter from "./product/productController.js";
-// import orderRouter from "./orders/orderController.js";
+const dbConfig = require("./databaseConfig");
 app.use(express.json());
 
-console.log(sequelize);
+const User = require("./users/userModel")(
+  dbConfig.sequelize,
+  dbConfig.DataTypes
+);
+
+const Product = require("./product/productModel")(
+  dbConfig.sequelize,
+  dbConfig.DataTypes
+);
+
+const Order = require("./orders/orderModel")(
+  dbConfig.sequelize,
+  dbConfig.DataTypes
+);
+
+const OrderDetails = require("./orderDetails/orderDetailModel")(
+  dbConfig.sequelize,
+  dbConfig.DataTypes
+);
+
+User.hasMany(Order);
+Order.belongsTo(User);
+
+Order.belongsToMany(Product, { through: OrderDetails });
+Product.belongsToMany(Order, { through: OrderDetails });
+
+// Order.belongsToMany(Product, { through: "order_details" });
+// Product.belongsToMany(Order, { through: "order_details" });
+
+dbConfig.sequelize.sync({ force: true });
+// OrderDetails.sync({ force: true });
 
 // app.use(productRouter);
 // app.get("/users", async (req, res, next) => {
@@ -207,8 +218,4 @@ app.get("/demo", async (req, res) => {
   res.status(200).json({ users });
 });
 
-// app.use(/^\/products?/, productRouter);
-// app.use(/^\/orders?/, orderRouter);
-
-// export default app;
 module.exports = app;
