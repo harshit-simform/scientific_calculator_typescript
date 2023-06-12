@@ -26,8 +26,12 @@ const OrderDetails = require("./orderDetails/orderDetailModel")(
 User.hasMany(Order);
 Order.belongsTo(User);
 
-Order.belongsToMany(Product, { through: OrderDetails });
-Product.belongsToMany(Order, { through: OrderDetails });
+Order.belongsToMany(Product, {
+  through: { model: OrderDetails, unique: false },
+});
+Product.belongsToMany(Order, {
+  through: { model: OrderDetails, unique: false },
+});
 
 // Order.belongsToMany(Product, { through: "order_details" });
 // Product.belongsToMany(Order, { through: "order_details" });
