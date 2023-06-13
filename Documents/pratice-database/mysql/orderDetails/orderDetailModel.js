@@ -8,24 +8,16 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      //   orderId: {
-      //     type: DataTypes.INTEGER,
-      //     allowNull: false,
-      //     unique: false,
-      //   },
-      //   productId: {
-      //     type: DataTypes.INTEGER,
-      //     allowNull: false,
-      //     unique: false,
-      //   },
+      orderId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      productId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
-      //   indexes: [
-      //     {
-      //       unique: false,
-      //       fields: ["orderId", "productId"],
-      //     },
-      //   ],
       timestamps: false,
     }
   );

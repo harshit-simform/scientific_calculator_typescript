@@ -2,7 +2,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const dbConfig = require("./databaseConfig");
 const app = require("./app.js");
-
 (async () => {
   try {
     await dbConfig.sequelize.authenticate();
