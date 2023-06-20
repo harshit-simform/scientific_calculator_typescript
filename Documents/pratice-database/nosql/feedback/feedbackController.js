@@ -6,9 +6,9 @@ const validateData = require('../validation');
 const Feedback = require('./feedbackModel');
 
 exports.createFeedback = async (req, res, next) => {
+  req.body.userId = req.user._id;
+  const [result, errorMessage] = validateData(req.body, 'feedback');
   try {
-    req.body.userId = req.user._id;
-    const [result, errorMessage] = validateData(req.body, 'feedback');
     if (!result) throw new Error(errorMessage);
     const newFeedback = await Feedback.create({
       userId: req.body.userId,
@@ -23,7 +23,7 @@ exports.createFeedback = async (req, res, next) => {
       newFeedback,
     });
   } catch (err) {
-    res.status(500).json({
+    res.status(result === false ? 401 : 500).json({
       status: 'fail',
       message: err.message,
     });

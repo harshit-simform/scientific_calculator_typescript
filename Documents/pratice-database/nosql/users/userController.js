@@ -43,9 +43,9 @@ exports.login = async (req, res, next) => {
 
 // api endpoint for register
 exports.register = async (req, res, next) => {
+  // for validating incomming data
+  const [result, errorMessage] = validateData(req.body, 'user');
   try {
-    // for validating incomming data
-    const [result, errorMessage] = validateData(req.body, 'user');
     if (!result) throw new Error(errorMessage);
 
     // for creating new user
@@ -62,7 +62,7 @@ exports.register = async (req, res, next) => {
       newUser,
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(result === false ? 401 : 500).json({
       status: 'error',
       message: error.message,
     });
