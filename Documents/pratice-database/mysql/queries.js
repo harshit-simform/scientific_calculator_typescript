@@ -1,5 +1,46 @@
 const dbConfig = require("./databaseConfig");
 
+exports.userData = () => async (req, res) => {
+  try {
+    const result = await dbConfig.Order.findAll({
+      include: [
+        {
+          model: dbConfig.User,
+          attributes: ["name"],
+        },
+        {
+          model: dbConfig.Product,
+          attributes: ["title"],
+          through: { attributes: [] },
+        },
+      ],
+      attributes: [
+        "id",
+        "order_status",
+        "order_date",
+        "delivery_date",
+        [
+          dbConfig.sequelize.literal(
+            "DATEDIFF(orders.delivery_date, orders.order_date)"
+          ),
+          "Expected_delivery_date",
+        ],
+      ],
+    });
+
+    res.status(200).json({
+      status: "success",
+      totalOrder: result.length,
+      orders: result,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
 exports.undeliverOrders = () => async (req, res) => {
   console.log("undeliverOrders");
   try {
