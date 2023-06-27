@@ -1,10 +1,8 @@
 const dbConfig = require("./databaseConfig");
 
 exports.getAllData = (Model, title) => async (req, res, next) => {
-  console.log("in get");
   try {
     const data = await Model.findAll();
-    console.log(data);
     res.status(200).json({
       status: "success",
       [`Total ${title}`]: data.length,
@@ -19,12 +17,9 @@ exports.getAllData = (Model, title) => async (req, res, next) => {
 };
 
 exports.getData = (Model, title) => async (req, res, next) => {
-  console.log("in get");
   try {
     const { id } = req.params;
-    console.log(id);
     const data = await Model.findAll({ where: { id } });
-    console.log(data);
     res.status(200).json({
       status: "success",
       [`Total ${title}`]: data.length,
