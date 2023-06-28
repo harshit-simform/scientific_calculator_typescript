@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // All variable declarations
 let displayScreen = document.getElementById("screen");
 const trigoButton = document.querySelectorAll("#trigo_function .btn");
